@@ -25,10 +25,10 @@ jobs:
           cache: maven
 
       - name: Build + Test (Triangle_Example)
-        run: mvn -B -e -f CICD-testing/Triangle_Example/pom.xml clean test
+        run: mvn -B -e -f CICD-testing/Triangle_Example/pom.xml clean verify
 
       - name: Build + Test (Tutorial_Stack)
-        run: mvn -B -e -f CICD-testing/Tutorial_Stack/pom.xml clean test
+        run: mvn -B -e -f CICD-testing/Tutorial_Stack/pom.xml clean verify
 
       - name: Upload JaCoCo reports
         if: always()
