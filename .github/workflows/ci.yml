@@ -13,13 +13,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: CICD-testing
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Repo sanity check (show files)
+        run: |
+          echo "Repo root:"
+          ls -la
+          echo ""
+          echo "CICD-testing folder:"
+          ls -la CICD-testing || true
+          echo ""
+          echo "Find pom.xml:"
+          find . -maxdepth 3 -name pom.xml -print
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -28,8 +35,9 @@ jobs:
           java-version: "11"
           cache: maven
 
+      # IMPORTANT: use -f so Maven always uses the right pom.xml
       - name: Build + Test + Coverage
-        run: mvn -B clean verify
+        run: mvn -B -f CICD-testing/pom.xml clean verify
 
       - name: Upload JaCoCo report
         if: always()
@@ -37,6 +45,7 @@ jobs:
         with:
           name: jacoco-report
           path: CICD-testing/target/site/jacoco/
+          if-no-files-found: warn
 
       - name: Upload surefire test reports
         if: always()
@@ -44,3 +53,4 @@ jobs:
         with:
           name: surefire-reports
           path: CICD-testing/target/surefire-reports/
+          if-no-files-found: warn
