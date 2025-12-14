@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/EvoSuite/evosuite.svg?branch=master)](https://travis-ci.org/EvoSuite/evosuite)
 [![CircleCI](https://circleci.com/gh/EvoSuite/evosuite.svg?style=svg&circle-token=f00c8d84b9dcf7dae4a82438441823f3be9df090)](https://circleci.com/gh/EvoSuite/evosuite)
 
-[//]: # (testing CI)
+[//]: # (testing CI-2)
 
 # What is EvoSuite?
 
