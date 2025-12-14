@@ -17,17 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Repo sanity check (show files)
-        run: |
-          echo "Repo root:"
-          ls -la
-          echo ""
-          echo "CICD-testing folder:"
-          ls -la CICD-testing || true
-          echo ""
-          echo "Find pom.xml:"
-          find . -maxdepth 3 -name pom.xml -print
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -35,27 +24,28 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Show Java + Maven versions
-        run: | 
-          java -version
-          mvn -version
+      - name: Build + Test (Triangle_Example)
+        run: mvn -B -e -f CICD-testing/Triangle_Example/pom.xml clean test
 
-      # IMPORTANT: use -f so Maven always uses the right pom.xml
-      - name: Build + Test + Coverage (verbose)
-        run: mvn -B -e -f CICD-testing/pom.xml clean test
+      - name: Build + Test (Tutorial_Stack)
+        run: mvn -B -e -f CICD-testing/Tutorial_Stack/pom.xml clean test
 
-      - name: Upload JaCoCo report
+      - name: Upload JaCoCo reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
-          path: CICD-testing/target/site/jacoco/
+          name: jacoco-reports
+          path: |
+            CICD-testing/Triangle_Example/target/site/jacoco/
+            CICD-testing/Tutorial_Stack/target/site/jacoco/
           if-no-files-found: warn
 
-      - name: Upload surefire test reports
+      - name: Upload Surefire reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
-          path: CICD-testing/target/surefire-reports/
+          path: |
+            CICD-testing/Triangle_Example/target/surefire-reports/
+            CICD-testing/Tutorial_Stack/target/surefire-reports/
           if-no-files-found: warn
